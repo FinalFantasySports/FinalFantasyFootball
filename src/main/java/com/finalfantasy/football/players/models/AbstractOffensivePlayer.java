@@ -1,4 +1,4 @@
-package com.finalfantasy.football.players;
+package com.finalfantasy.football.players.models;
 
 public abstract class AbstractOffensivePlayer extends AbstractPlayer implements Player {
 

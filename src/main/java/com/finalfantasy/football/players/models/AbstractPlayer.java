@@ -1,4 +1,4 @@
-package com.finalfantasy.football.players;
+package com.finalfantasy.football.players.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vladmihalcea.hibernate.type.array.IntArrayType;

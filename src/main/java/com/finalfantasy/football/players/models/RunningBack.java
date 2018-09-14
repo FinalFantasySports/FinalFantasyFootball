@@ -1,4 +1,4 @@
-package com.finalfantasy.football.players;
+package com.finalfantasy.football.players.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
