@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DefenseSpecialTeamsRepository extends JpaRepository<DefenseSpecialTeams, Integer> {
+public interface DefenseSpecialTeamsRepository extends JpaRepository<DefenseSpecialTeams, Long> {
 }

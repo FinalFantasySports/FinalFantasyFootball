@@ -13,6 +13,6 @@ public class DefenseSpecialTeams extends AbstractPlayer implements Player {
   private Long id;
 
   public DefenseSpecialTeams() {
-    super(Position.DST);
+    super(Position.DEF);
   }
 }

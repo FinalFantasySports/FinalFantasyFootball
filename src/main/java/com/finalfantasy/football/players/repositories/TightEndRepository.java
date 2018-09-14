@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TightEndRepository extends JpaRepository<TightEnd, Integer> {
+public interface TightEndRepository extends JpaRepository<TightEnd, Long> {
 }

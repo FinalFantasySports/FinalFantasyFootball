@@ -6,5 +6,6 @@ public enum Position {
   WR,
   TE,
   K,
-  DST;
+  DEF,
+  MISC
 }

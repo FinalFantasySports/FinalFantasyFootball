@@ -42,7 +42,8 @@ public abstract class AbstractPlayer implements Player {
 
   public String esbid;
   public String gsisPlayerId;
-  public String team;
+  public String name;
+  public String teamAbbr;
   public Float apiSeasonPts;
   public Float apiSeasonProjectedPts;
   public Float apiWeekPts;

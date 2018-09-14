@@ -5,14 +5,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
-public class TightEnd extends AbstractOffensivePlayer implements Player {
+@Entity(name = "Player")
+public class MiscPlayer extends AbstractPlayer implements Player {
 
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
 
-  public TightEnd() {
-    super(Position.TE);
+  public String miscPosition;
+
+  public MiscPlayer(String miscPosition) {
+    super(Position.MISC);
+    this.miscPosition = miscPosition;
   }
 }
