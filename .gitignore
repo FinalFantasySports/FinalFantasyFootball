@@ -50,5 +50,5 @@ hs_err_pid*
 /nbdist/
 /.nb-gradle/
 
-src/main/resources/local.properties
+src/main/resources/application-local.properties
 target/
