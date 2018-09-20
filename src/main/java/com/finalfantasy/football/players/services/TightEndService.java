@@ -1,9 +1,12 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.models.TightEnd;
 import com.finalfantasy.football.players.repositories.TightEndRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class TightEndService {
@@ -12,6 +15,10 @@ public class TightEndService {
 
   public TightEndService(final TightEndRepository repository) {
     this.repository = repository;
+  }
+
+  public Collection<TightEnd> getTightEnds() {
+    return repository.findAll();
   }
 
   public void insertTightEndAsJsonNode(JsonNode node) {

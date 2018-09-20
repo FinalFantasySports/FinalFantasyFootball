@@ -1,9 +1,12 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.models.WideReceiver;
 import com.finalfantasy.football.players.repositories.WideReceiverRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class WideReceiverService {
@@ -12,6 +15,10 @@ public class WideReceiverService {
 
   public WideReceiverService(final WideReceiverRepository repository) {
     this.repository = repository;
+  }
+
+  public Collection<WideReceiver> getWideReceivers() {
+    return repository.findAll();
   }
 
   public void insertWideReceiverAsJsonNode(JsonNode node) {

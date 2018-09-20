@@ -5,12 +5,18 @@ import com.finalfantasy.football.players.models.Kicker;
 import com.finalfantasy.football.players.repositories.KickerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class KickerService {
   private final KickerRepository repository;
 
   public KickerService(final KickerRepository repository) {
     this.repository = repository;
+  }
+
+  public Collection<Kicker> getKickers() {
+    return repository.findAll();
   }
 
   public void insertKickerAsJsonNode(JsonNode node) {

@@ -5,6 +5,8 @@ import com.finalfantasy.football.players.models.Quarterback;
 import com.finalfantasy.football.players.repositories.QuarterbackRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class QuarterbackService {
 
@@ -12,6 +14,10 @@ public class QuarterbackService {
 
   public QuarterbackService(final QuarterbackRepository repository) {
     this.repository = repository;
+  }
+
+  public Collection<Quarterback> getQuarterbacks() {
+    return repository.findAll();
   }
 
   public void insertQuarterbackAsJsonNode(JsonNode node) {

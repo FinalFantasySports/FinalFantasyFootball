@@ -2,8 +2,11 @@ package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.finalfantasy.football.players.models.DefenseSpecialTeams;
+import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.repositories.DefenseSpecialTeamsRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class DefenseSpecialTeamsService {
@@ -12,6 +15,10 @@ public class DefenseSpecialTeamsService {
 
   public DefenseSpecialTeamsService(final DefenseSpecialTeamsRepository repository) {
     this.repository = repository;
+  }
+
+  public Collection<DefenseSpecialTeams> getDefenseSpecialTeamss() {
+    return repository.findAll();
   }
 
   public void insertDefenseSpecialTeamsAsJsonNode(JsonNode node) {
