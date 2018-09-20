@@ -1,5 +1,6 @@
-package com.finalfantasy.football;
+package com.finalfantasy.football.stats;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,16 @@ public class StatsController {
   public String populateDatabaseBySeasonAndWeek() {
     try {
       return "We did it! " + statsService.populateDatabaseBySeasonAndWeek();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return "Damn Jenna";
+    }
+  }
+
+  @GetMapping(value = "/key")
+  public String populateStatKey() {
+    try {
+      return statsService.populateStatKey();
     } catch (IOException e) {
       e.printStackTrace();
       return "Damn Jenna";

@@ -5,6 +5,8 @@ import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.repositories.RunningBackRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class RunningBackService {
 
@@ -12,6 +14,10 @@ public class RunningBackService {
 
   public RunningBackService(final RunningBackRepository repository) {
     this.repository = repository;
+  }
+
+  public Collection<RunningBack> getRunningBacks() {
+    return repository.findAll();
   }
 
   public void insertRunningBackAsJsonNode(JsonNode node) {

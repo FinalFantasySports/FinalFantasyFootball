@@ -1,4 +1,4 @@
-package com.finalfantasy.football;
+package com.finalfantasy.football.stats;
 
 public class WeekData {
 
