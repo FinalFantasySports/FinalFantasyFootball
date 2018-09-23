@@ -15,4 +15,16 @@ public class TightEnd extends AbstractOffensivePlayer implements Player {
   public TightEnd() {
     super(Position.TE);
   }
+
+  public TightEnd(DefaultPlayer defaultPlayer) {
+    super(Position.TE);
+    this.esbid = defaultPlayer.esbid;
+    this.gsisPlayerId = defaultPlayer.gsisPlayerId;
+    this.name = defaultPlayer.name;
+    this.teamAbbr = defaultPlayer.teamAbbr;
+    this.apiSeasonPts = defaultPlayer.apiSeasonPts;
+    this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
+    this.apiWeekPts = defaultPlayer.apiWeekPts;
+    this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
+  }
 }

@@ -15,4 +15,16 @@ public class RunningBack extends AbstractOffensivePlayer implements Player {
   public RunningBack() {
     super(Position.RB);
   }
+
+  public RunningBack(DefaultPlayer defaultPlayer) {
+    super(Position.RB);
+    this.esbid = defaultPlayer.esbid;
+    this.gsisPlayerId = defaultPlayer.gsisPlayerId;
+    this.name = defaultPlayer.name;
+    this.teamAbbr = defaultPlayer.teamAbbr;
+    this.apiSeasonPts = defaultPlayer.apiSeasonPts;
+    this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
+    this.apiWeekPts = defaultPlayer.apiWeekPts;
+    this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
+  }
 }

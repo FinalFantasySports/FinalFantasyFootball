@@ -15,4 +15,16 @@ public class Quarterback extends AbstractOffensivePlayer implements Player {
   public Quarterback() {
     super(Position.QB);
   }
+
+  public Quarterback(DefaultPlayer defaultPlayer) {
+    super(Position.QB);
+    this.esbid = defaultPlayer.esbid;
+    this.gsisPlayerId = defaultPlayer.gsisPlayerId;
+    this.name = defaultPlayer.name;
+    this.teamAbbr = defaultPlayer.teamAbbr;
+    this.apiSeasonPts = defaultPlayer.apiSeasonPts;
+    this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
+    this.apiWeekPts = defaultPlayer.apiWeekPts;
+    this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
+  }
 }

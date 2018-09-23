@@ -1,12 +1,11 @@
 package com.finalfantasy.football.stats;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@RestController
+@Controller
 @RequestMapping(value = "/stats")
 public class StatsController {
 
@@ -16,10 +15,10 @@ public class StatsController {
     this.statsService = statsService;
   }
 
-  @RequestMapping
-  public String populateDatabaseBySeasonAndWeek() {
+  @PostMapping(consumes = "application/json", produces = "application/json")
+  public String populateDatabaseBySeasonAndWeek(@RequestBody WeekData weekData) {
     try {
-      return "We did it! " + statsService.populateDatabaseBySeasonAndWeek();
+      return "We did it! " + statsService.populateDatabaseBySeasonAndWeek(weekData);
     } catch (IOException e) {
       e.printStackTrace();
       return "Damn Jenna";

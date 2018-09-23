@@ -15,4 +15,16 @@ public class DefenseSpecialTeams extends AbstractPlayer implements Player {
   public DefenseSpecialTeams() {
     super(Position.DEF);
   }
+
+  public DefenseSpecialTeams(DefaultPlayer defaultPlayer) {
+    super(Position.DEF);
+    this.esbid = defaultPlayer.esbid;
+    this.gsisPlayerId = defaultPlayer.gsisPlayerId;
+    this.name = defaultPlayer.name;
+    this.teamAbbr = defaultPlayer.teamAbbr;
+    this.apiSeasonPts = defaultPlayer.apiSeasonPts;
+    this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
+    this.apiWeekPts = defaultPlayer.apiWeekPts;
+    this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
+  }
 }

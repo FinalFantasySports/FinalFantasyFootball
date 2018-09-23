@@ -15,4 +15,16 @@ public class Kicker extends AbstractPlayer implements Player {
   public Kicker() {
     super(Position.K);
   }
+
+  public Kicker(DefaultPlayer defaultPlayer) {
+    super(Position.K);
+    this.esbid = defaultPlayer.esbid;
+    this.gsisPlayerId = defaultPlayer.gsisPlayerId;
+    this.name = defaultPlayer.name;
+    this.teamAbbr = defaultPlayer.teamAbbr;
+    this.apiSeasonPts = defaultPlayer.apiSeasonPts;
+    this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
+    this.apiWeekPts = defaultPlayer.apiWeekPts;
+    this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
+  }
 }

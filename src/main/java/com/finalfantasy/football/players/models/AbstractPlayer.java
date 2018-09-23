@@ -2,7 +2,14 @@ package com.finalfantasy.football.players.models;
 
 import com.finalfantasy.football.AbstractModel;
 
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
+
+@MappedSuperclass
 public abstract class AbstractPlayer extends AbstractModel implements Player {
+
+  public Map<String, Float> stats = new HashMap<>();
 
   public String esbid;
   public String gsisPlayerId;
