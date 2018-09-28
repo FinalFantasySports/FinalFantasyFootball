@@ -1,9 +1,6 @@
 package com.finalfantasy.football.players.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class DefenseSpecialTeams extends AbstractPlayer implements Player {
@@ -11,6 +8,24 @@ public class DefenseSpecialTeams extends AbstractPlayer implements Player {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
+
+  short sacks;
+  short interception;
+  short fumbleRecovery;
+  short touchdown;
+  short safety;
+  float returnYds;
+  short blockKick;
+  short kickOffAndPuntReturnTds;
+  short pointsAllowed0;
+  short pointsAllowed1_6;
+  short pointsAllowed7_13;
+  short pointsAllowed14_20;
+  short pointsAllowed21_27;
+  short pointsAllowed28_34;
+  short pointsAllowedOver35;
+  short fourthDownStops;
+  short extraPointReturned;
 
   public DefenseSpecialTeams() {
     super(Position.DEF);

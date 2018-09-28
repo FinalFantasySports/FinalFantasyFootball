@@ -70,22 +70,6 @@ public class PlayersService {
     }
   }
 
-  private DefaultPlayer setStats(DefaultPlayer player, JsonNode statsNode) {
-
-    var objectMapper = new ObjectMapper();
-
-    statKeys.stream().forEach(statKey -> {
-      var map = objectMapper.convertValue(statsNode,HashMap.class);
-      map.forEach((key, value) -> {
-        if(Integer.valueOf(key.toString()) == statKey.id) {
-          player.stats.put(statKey.abbr, Float.valueOf(value.toString()));
-        }
-      });
-    });
-
-    return player;
-  }
-
   private DefaultPlayer jsonToDefaultPlayer(JsonNode player) {
 
     DefaultPlayer defaultPlayer = new DefaultPlayer(player.path("position").toString().replaceAll("\"", ""));
@@ -97,8 +81,9 @@ public class PlayersService {
     defaultPlayer.apiSeasonProjectedPts = player.path("seasonProjectedPts").floatValue();
     defaultPlayer.apiWeekPts = player.path("weekPts").floatValue();
     defaultPlayer.apiWeekProjectedPts = player.path("weekProjectedPts").floatValue();
+    defaultPlayer.stats = player.path("stats");
 
-    return setStats(defaultPlayer, player.path("stats"));
+    return defaultPlayer;
   }
 
   private void insertPlayer(DefaultPlayer player) {

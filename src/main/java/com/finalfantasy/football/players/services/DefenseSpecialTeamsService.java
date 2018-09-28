@@ -6,17 +6,21 @@ import com.finalfantasy.football.players.models.DefenseSpecialTeams;
 import com.finalfantasy.football.players.models.Quarterback;
 import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.repositories.DefenseSpecialTeamsRepository;
+import com.finalfantasy.football.stats.StatKey;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
 public class DefenseSpecialTeamsService {
 
   private final DefenseSpecialTeamsRepository repository;
+  private final ArrayList<StatKey> statKeys;
 
-  public DefenseSpecialTeamsService(final DefenseSpecialTeamsRepository repository) {
+  public DefenseSpecialTeamsService(final DefenseSpecialTeamsRepository repository, final ArrayList<StatKey> statKeys) {
     this.repository = repository;
+    this.statKeys = statKeys;
   }
 
   public Collection<DefenseSpecialTeams> getDefenseSpecialTeamss() {
@@ -40,4 +44,6 @@ public class DefenseSpecialTeamsService {
 
     repository.save(defenseSpecialTeams);
   }
+
+
 }
