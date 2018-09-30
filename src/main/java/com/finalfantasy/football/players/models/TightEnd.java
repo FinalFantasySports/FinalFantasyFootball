@@ -1,11 +1,8 @@
 package com.finalfantasy.football.players.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
+@Entity(name = "tightends")
 public class TightEnd extends AbstractOffensivePlayer implements Player {
 
   @Id
@@ -14,5 +11,17 @@ public class TightEnd extends AbstractOffensivePlayer implements Player {
 
   public TightEnd() {
     super(Position.TE);
+  }
+
+  public TightEnd(DefaultPlayer defaultPlayer) {
+    super(Position.TE);
+    this.esbid = defaultPlayer.esbid;
+    this.gsisPlayerId = defaultPlayer.gsisPlayerId;
+    this.name = defaultPlayer.name;
+    this.teamAbbr = defaultPlayer.teamAbbr;
+    this.apiSeasonPts = defaultPlayer.apiSeasonPts;
+    this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
+    this.apiWeekPts = defaultPlayer.apiWeekPts;
+    this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
   }
 }
