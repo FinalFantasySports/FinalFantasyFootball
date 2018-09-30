@@ -1,17 +1,20 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.finalfantasy.football.players.models.DefaultPlayer;
-import com.finalfantasy.football.players.models.Quarterback;
-import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.models.TightEnd;
 import com.finalfantasy.football.players.repositories.TightEndRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Collection;
 
 @Service
 public class TightEndService {
+
+  private static final Logger log = LoggerFactory.getLogger(TightEndService.class);
 
   private final TightEndRepository repository;
 
@@ -23,8 +26,15 @@ public class TightEndService {
     return repository.findAll();
   }
 
-  public void saveTightEndAsDefaultPlayer(DefaultPlayer player) {
-    repository.save(player.toTightEnd());
+  @Async
+  public void saveTightEndWithStats(TightEnd player, JsonNode stats) {
+    try {
+      player.addStats(stats);
+    } catch (IOException e) {
+      log.error("Unable to parse stats for {}", player.name);
+      e.printStackTrace();
+    }
+    repository.save(player);
   }
 
   public void insertTightEndAsJsonNode(JsonNode node) {

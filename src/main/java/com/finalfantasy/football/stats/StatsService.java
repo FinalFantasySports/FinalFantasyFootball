@@ -57,7 +57,7 @@ public class StatsService {
     var playersNode = root.path("players");
 
     playersNode.iterator().forEachRemaining(player -> {
-      playersService.sortPlayer(player);
+      playersService.sortPlayer(player, weekData.week, weekData.season);
     });
     return false;
   }

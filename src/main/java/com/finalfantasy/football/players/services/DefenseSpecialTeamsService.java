@@ -1,34 +1,40 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.finalfantasy.football.players.models.DefaultPlayer;
 import com.finalfantasy.football.players.models.DefenseSpecialTeams;
-import com.finalfantasy.football.players.models.Quarterback;
-import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.repositories.DefenseSpecialTeamsRepository;
-import com.finalfantasy.football.stats.StatKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Collection;
 
 @Service
 public class DefenseSpecialTeamsService {
 
-  private final DefenseSpecialTeamsRepository repository;
-  private final ArrayList<StatKey> statKeys;
+  private static final Logger log = LoggerFactory.getLogger(DefenseSpecialTeamsService.class);
 
-  public DefenseSpecialTeamsService(final DefenseSpecialTeamsRepository repository, final ArrayList<StatKey> statKeys) {
+  private final DefenseSpecialTeamsRepository repository;
+
+  public DefenseSpecialTeamsService(final DefenseSpecialTeamsRepository repository) {
     this.repository = repository;
-    this.statKeys = statKeys;
   }
 
   public Collection<DefenseSpecialTeams> getDefenseSpecialTeamss() {
     return repository.findAll();
   }
 
-  public void saveDefenseSpecialTeamsAsDefaultPlayer(DefaultPlayer player) {
-    repository.save(player.toDefenseSpecialTeams());
+  @Async
+  public void saveDefenseSpecialTeamsWithStats(DefenseSpecialTeams player, JsonNode stats) {
+    try {
+      player.addStats(stats);
+    } catch (IOException e) {
+      log.error("Unable to parse stats for {}", player.name);
+      e.printStackTrace();
+    }
+    repository.save(player);
   }
 
   public void insertDefenseSpecialTeamsAsJsonNode(JsonNode node) {

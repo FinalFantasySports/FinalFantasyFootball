@@ -1,10 +1,11 @@
 package com.finalfantasy.football.players.models;
 
-import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@Entity
+@Entity(name = "runningbacks")
 public class RunningBack extends AbstractOffensivePlayer implements Player {
 
   @Id

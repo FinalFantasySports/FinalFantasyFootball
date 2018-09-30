@@ -1,10 +1,11 @@
 package com.finalfantasy.football.players.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.stats.YahooLeagueScoring;
 
 import javax.persistence.*;
 
-@Entity(name = "Player")
+@Entity(name = "players")
 public class DefaultPlayer extends AbstractPlayer implements Player {
 
   @Id
@@ -40,5 +41,10 @@ public class DefaultPlayer extends AbstractPlayer implements Player {
 
   public DefenseSpecialTeams toDefenseSpecialTeams() {
     return new DefenseSpecialTeams(this);
+  }
+
+  @Override
+  public void calculateYahooFantasyPoints(YahooLeagueScoring yahooLeagueScoring) {
+
   }
 }

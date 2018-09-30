@@ -1,16 +1,15 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalfantasy.football.players.models.*;
+import com.finalfantasy.football.players.models.DefaultPlayer;
 import com.finalfantasy.football.players.repositories.PlayerRepository;
 import com.finalfantasy.football.stats.StatKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @Service
 public class PlayersService {
@@ -41,28 +40,30 @@ public class PlayersService {
     this.statKeys = statKeys;
   }
 
-  public void sortPlayer(JsonNode node) {
+  @Async
+  public void sortPlayer(JsonNode node, short week, short season) {
 
     DefaultPlayer player = jsonToDefaultPlayer(node);
-
+    player.week = week;
+    player.season = season;
     switch (player.position) {
       case QB:
-        quarterbackService.saveQuarterbackAsDefaultPlayer(player);
+        quarterbackService.saveQuarterbackWithStats(player.toQuarterback(), player.stats);
         break;
       case RB :
-        runningBackService.saveRunningBackAsDefaultPlayer(player);
+        runningBackService.saveRunningBackWithStats(player.toRunningBack(), player.stats);
         break;
       case WR :
-        wideReceiverService.saveWideReceiverAsDefaultPlayer(player);
+        wideReceiverService.saveWideReceiverWithStats(player.toWideReceiver(), player.stats);
         break;
       case TE :
-        tightEndService.saveTightEndAsDefaultPlayer(player);
+        tightEndService.saveTightEndWithStats(player.toTightEnd(), player.stats);
         break;
       case K :
-        kickerService.saveKickerAsDefaultPlayer(player);
+        kickerService.saveKickerWithStats(player.toKicker(), player.stats);
         break;
       case DEF :
-        defenseSpecialTeamsService.saveDefenseSpecialTeamsAsDefaultPlayer(player);
+        defenseSpecialTeamsService.saveDefenseSpecialTeamsWithStats(player.toDefenseSpecialTeams(), player.stats);
         break;
       default:
         insertPlayer(player);

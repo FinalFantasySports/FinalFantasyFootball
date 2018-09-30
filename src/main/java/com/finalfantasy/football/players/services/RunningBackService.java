@@ -1,18 +1,20 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.finalfantasy.football.players.models.DefaultPlayer;
-
 import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.repositories.RunningBackRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Collection;
 
 @Service
 public class RunningBackService {
 
-  //private static final Logger log = LoggerFactory.getLogger(RunningBackService.class);
+  private static final Logger log = LoggerFactory.getLogger(RunningBackService.class);
 
   private final RunningBackRepository repository;
 
@@ -24,8 +26,15 @@ public class RunningBackService {
     return repository.findAll();
   }
 
-  public void saveRunningBackAsDefaultPlayer(DefaultPlayer player) {
-    repository.save(player.toRunningBack());
+  @Async
+  public void saveRunningBackWithStats(RunningBack player, JsonNode stats) {
+    try {
+      player.addStats(stats);
+    } catch (IOException e) {
+      log.error("Unable to parse stats for {}", player.name);
+      e.printStackTrace();
+    }
+    repository.save(player);
   }
 
   public void insertRunningBackAsJsonNode(JsonNode node) {

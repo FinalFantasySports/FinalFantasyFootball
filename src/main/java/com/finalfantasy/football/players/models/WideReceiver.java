@@ -2,7 +2,7 @@ package com.finalfantasy.football.players.models;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "widereceivers")
 public class WideReceiver extends AbstractOffensivePlayer implements Player {
 
   @Id

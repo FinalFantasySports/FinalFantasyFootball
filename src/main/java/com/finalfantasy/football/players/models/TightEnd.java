@@ -2,7 +2,7 @@ package com.finalfantasy.football.players.models;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "tightends")
 public class TightEnd extends AbstractOffensivePlayer implements Player {
 
   @Id
