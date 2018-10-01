@@ -26,6 +26,17 @@ public class KickerService {
     return repository.findAll();
   }
 
+  public Collection<Kicker> getKickersBySeasonAndOrWeek(Short season, Short week) {
+
+    if(season != null && week != null) {
+      return repository.findAllBySeasonAndWeek(season, week);
+    } else if (season != null) {
+      return repository.findAllBySeason(season);
+    } else {
+      return repository.findAll();
+    }
+  }
+
   @Async
   public void saveKickerWithStats(Kicker player, JsonNode stats) {
     try {

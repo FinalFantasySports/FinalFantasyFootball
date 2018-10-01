@@ -26,6 +26,17 @@ public class QuarterbackService {
     return repository.findAll();
   }
 
+  public Collection<Quarterback> getQuarterbacksBySeasonAndOrWeek(Short season, Short week) {
+
+    if(season != null && week != null) {
+      return repository.findAllBySeasonAndWeek(season, week);
+    } else if (season != null) {
+      return repository.findAllBySeason(season);
+    } else {
+      return repository.findAll();
+    }
+  }
+
   @Async
   public void saveQuarterbackWithStats(Quarterback player, JsonNode stats) {
     try {

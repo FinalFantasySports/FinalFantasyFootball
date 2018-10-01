@@ -1,11 +1,9 @@
 package com.finalfantasy.football.players.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "runningbacks")
+@Table(indexes = { @Index(name = "IDX_SEASON_WEEK", columnList = "season,week") })
 public class RunningBack extends AbstractOffensivePlayer implements Player {
 
   @Id
@@ -26,5 +24,7 @@ public class RunningBack extends AbstractOffensivePlayer implements Player {
     this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
     this.apiWeekPts = defaultPlayer.apiWeekPts;
     this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
+    this.season = defaultPlayer.season;
+    this.week = defaultPlayer.week;
   }
 }

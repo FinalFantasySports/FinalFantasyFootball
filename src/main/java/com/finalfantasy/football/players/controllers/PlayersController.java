@@ -1,4 +1,4 @@
-package com.finalfantasy.football.players;
+package com.finalfantasy.football.players.controllers;
 
 import com.finalfantasy.football.players.models.Quarterback;
 import com.finalfantasy.football.players.services.QuarterbackService;

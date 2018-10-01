@@ -26,6 +26,17 @@ public class TightEndService {
     return repository.findAll();
   }
 
+  public Collection<TightEnd> getTightEndsBySeasonAndOrWeek(Short season, Short week) {
+
+    if(season != null && week != null) {
+      return repository.findAllBySeasonAndWeek(season, week);
+    } else if (season != null) {
+      return repository.findAllBySeason(season);
+    } else {
+      return repository.findAll();
+    }
+  }
+
   @Async
   public void saveTightEndWithStats(TightEnd player, JsonNode stats) {
     try {

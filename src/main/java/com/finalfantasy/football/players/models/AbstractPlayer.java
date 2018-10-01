@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalfantasy.football.AbstractModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Indexed;
 
 import javax.persistence.MappedSuperclass;
 import java.io.IOException;
 import java.util.Map;
 
+@Indexed
 @MappedSuperclass
 public abstract class AbstractPlayer extends AbstractModel implements Player {
 

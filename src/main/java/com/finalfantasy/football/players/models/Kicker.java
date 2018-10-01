@@ -5,14 +5,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalfantasy.football.stats.YahooLeagueScoring;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.IOException;
 import java.util.Map;
 
 @Entity(name = "kickers")
+@Table(indexes = { @Index(name = "IDX_SEASON_WEEK", columnList = "season,week") })
 public class Kicker extends AbstractPlayer implements Player {
 
   @Id
@@ -38,6 +36,8 @@ public class Kicker extends AbstractPlayer implements Player {
     this.apiSeasonProjectedPts = defaultPlayer.apiSeasonProjectedPts;
     this.apiWeekPts = defaultPlayer.apiWeekPts;
     this.apiWeekProjectedPts = defaultPlayer.apiWeekProjectedPts;
+    this.season = defaultPlayer.season;
+    this.week = defaultPlayer.week;
   }
 
   @Override

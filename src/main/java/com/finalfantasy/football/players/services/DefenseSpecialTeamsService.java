@@ -26,6 +26,17 @@ public class DefenseSpecialTeamsService {
     return repository.findAll();
   }
 
+  public Collection<DefenseSpecialTeams> getDefenseSpecialTeamssBySeasonAndOrWeek(Short season, Short week) {
+
+    if(season != null && week != null) {
+      return repository.findAllBySeasonAndWeek(season, week);
+    } else if (season != null) {
+      return repository.findAllBySeason(season);
+    } else {
+      return repository.findAll();
+    }
+  }
+
   @Async
   public void saveDefenseSpecialTeamsWithStats(DefenseSpecialTeams player, JsonNode stats) {
     try {

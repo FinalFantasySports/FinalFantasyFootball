@@ -26,6 +26,17 @@ public class WideReceiverService {
     return repository.findAll();
   }
 
+  public Collection<WideReceiver> getWideReceiversBySeasonAndOrWeek(Short season, Short week) {
+
+    if(season != null && week != null) {
+      return repository.findAllBySeasonAndWeek(season, week);
+    } else if (season != null) {
+      return repository.findAllBySeason(season);
+    } else {
+      return repository.findAll();
+    }
+  }
+
   @Async
   public void saveWideReceiverWithStats(WideReceiver player, JsonNode stats) {
     try {
