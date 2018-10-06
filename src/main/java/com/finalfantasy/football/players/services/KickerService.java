@@ -1,6 +1,8 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.league.LeagueScoring;
+import com.finalfantasy.football.league.LeagueService;
 import com.finalfantasy.football.players.models.Kicker;
 import com.finalfantasy.football.players.repositories.KickerRepository;
 import org.slf4j.Logger;
@@ -17,9 +19,11 @@ public class KickerService {
   private static final Logger log = LoggerFactory.getLogger(WideReceiverService.class);
 
   private final KickerRepository repository;
+  private final LeagueService leagueService;
 
-  public KickerService(final KickerRepository repository) {
+  public KickerService(final KickerRepository repository, final LeagueService leagueService) {
     this.repository = repository;
+    this.leagueService = leagueService;
   }
 
   public Collection<Kicker> getKickers() {
@@ -28,13 +32,22 @@ public class KickerService {
 
   public Collection<Kicker> getKickersBySeasonAndOrWeek(Short season, Short week) {
 
+    Collection<Kicker> kickers;
+    LeagueScoring leagueScoring = leagueService.getLeague();
+
     if(season != null && week != null) {
-      return repository.findAllBySeasonAndWeek(season, week);
+      kickers =  repository.findAllBySeasonAndWeek(season, week);
     } else if (season != null) {
-      return repository.findAllBySeason(season);
+      kickers = repository.findAllBySeason(season);
     } else {
-      return repository.findAll();
+      kickers = repository.findAll();
     }
+
+    kickers.parallelStream().forEach(kicker -> {
+      kicker.fantasyPoints = leagueScoring.calculateFantasyPts(kicker);
+    });
+
+    return kickers;
   }
 
   @Async

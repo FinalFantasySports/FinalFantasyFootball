@@ -3,13 +3,10 @@ package com.finalfantasy.football.players.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.finalfantasy.football.players.models.DefaultPlayer;
 import com.finalfantasy.football.players.repositories.PlayerRepository;
-import com.finalfantasy.football.stats.StatKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class PlayersService {
@@ -23,13 +20,11 @@ public class PlayersService {
   private final KickerService kickerService;
   private final DefenseSpecialTeamsService defenseSpecialTeamsService;
   private final PlayerRepository playerRepository;
-  private final ArrayList<StatKey> statKeys;
 
   public PlayersService(final QuarterbackService quarterbackService,
     final RunningBackService runningBackService, final WideReceiverService wideReceiverService,
     final KickerService kickerService, final TightEndService tightEndService,
-    final DefenseSpecialTeamsService defenseSpecialTeamsService, final PlayerRepository playerRepository, final
-                        ArrayList<StatKey> statKeys) {
+    final DefenseSpecialTeamsService defenseSpecialTeamsService, final PlayerRepository playerRepository) {
     this.quarterbackService = quarterbackService;
     this.runningBackService = runningBackService;
     this.wideReceiverService = wideReceiverService;
@@ -37,7 +32,6 @@ public class PlayersService {
     this.kickerService = kickerService;
     this.defenseSpecialTeamsService = defenseSpecialTeamsService;
     this.playerRepository = playerRepository;
-    this.statKeys = statKeys;
   }
 
   @Async

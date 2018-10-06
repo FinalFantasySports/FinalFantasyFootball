@@ -1,6 +1,8 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.league.LeagueScoring;
+import com.finalfantasy.football.league.LeagueService;
 import com.finalfantasy.football.players.models.Quarterback;
 import com.finalfantasy.football.players.repositories.QuarterbackRepository;
 import org.slf4j.Logger;
@@ -17,9 +19,11 @@ public class QuarterbackService {
   private static final Logger log = LoggerFactory.getLogger(QuarterbackService.class);
 
   private final QuarterbackRepository repository;
+  private final LeagueService leagueService;
 
-  public QuarterbackService(final QuarterbackRepository repository) {
+  public QuarterbackService(final QuarterbackRepository repository, final LeagueService leagueService) {
     this.repository = repository;
+    this.leagueService = leagueService;
   }
 
   public Collection<Quarterback> getQuarterbacks() {
@@ -28,13 +32,22 @@ public class QuarterbackService {
 
   public Collection<Quarterback> getQuarterbacksBySeasonAndOrWeek(Short season, Short week) {
 
+    Collection<Quarterback> quarterbacks;
+    LeagueScoring leagueScoring = leagueService.getLeague();
+
     if(season != null && week != null) {
-      return repository.findAllBySeasonAndWeek(season, week);
+      quarterbacks = repository.findAllBySeasonAndWeek(season, week);
     } else if (season != null) {
-      return repository.findAllBySeason(season);
+      quarterbacks = repository.findAllBySeason(season);
     } else {
-      return repository.findAll();
+      quarterbacks = repository.findAll();
     }
+
+    quarterbacks.parallelStream().forEach(qb -> {
+      qb.fantasyPoints = leagueScoring.calculateFantasyPts(qb);
+    });
+
+    return quarterbacks;
   }
 
   @Async

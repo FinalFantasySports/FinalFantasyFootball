@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.io.IOException;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 @MappedSuperclass
 public abstract class AbstractPlayer extends AbstractModel implements Player {
 
-  static final Logger log = LoggerFactory.getLogger(AbstractPlayer.class);
+  private static final Logger log = LoggerFactory.getLogger(AbstractPlayer.class);
 
   public short season;
   public short week;
@@ -31,6 +32,8 @@ public abstract class AbstractPlayer extends AbstractModel implements Player {
   public float apiSeasonProjectedPts;
   public float apiWeekPts;
   public float apiWeekProjectedPts;
+  @Transient
+  public float fantasyPoints;
   public Position position;
 
   public AbstractPlayer(Position position) {

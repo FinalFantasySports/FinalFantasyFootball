@@ -3,7 +3,6 @@ package com.finalfantasy.football.players.models;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalfantasy.football.stats.YahooLeagueScoring;
 
 import javax.persistence.MappedSuperclass;
 import java.io.IOException;
@@ -19,8 +18,7 @@ public abstract class AbstractOffensivePlayer extends AbstractPlayer implements 
   public short receivingTds;
   public short fumblesLost;
   public short twoPointCon;
-
-  public short fumblesRecTds;
+  public short offensiveFumbleReturnTds;
 
   public AbstractOffensivePlayer(Position position) {
     super(position);
@@ -56,17 +54,13 @@ public abstract class AbstractOffensivePlayer extends AbstractPlayer implements 
           this.twoPointCon = Short.parseShort(value);
           break;
         case 29:
-          this.fumblesRecTds = Short.parseShort(value);
+          this.offensiveFumbleReturnTds = Short.parseShort(value);
           break;
         default:
-          log.warn("Did not Find stat for key: {} value: {}", key, value);
+//          log.warn("Did not Find stat for key: {} value: {}", key, value);
           break;
       }
     });
   }
 
-  @Override
-  public void calculateYahooFantasyPoints(YahooLeagueScoring yahooLeagueScoring) {
-
-  }
 }
