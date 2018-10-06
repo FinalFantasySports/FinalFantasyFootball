@@ -1,6 +1,8 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.league.LeagueScoring;
+import com.finalfantasy.football.league.LeagueService;
 import com.finalfantasy.football.players.models.RunningBack;
 import com.finalfantasy.football.players.repositories.RunningBackRepository;
 import org.slf4j.Logger;
@@ -17,9 +19,11 @@ public class RunningBackService {
   private static final Logger log = LoggerFactory.getLogger(RunningBackService.class);
 
   private final RunningBackRepository repository;
+  private final LeagueService leagueService;
 
-  public RunningBackService(final RunningBackRepository repository) {
+  public RunningBackService(final RunningBackRepository repository, final LeagueService leagueService) {
     this.repository = repository;
+    this.leagueService = leagueService;
   }
 
   public Collection<RunningBack> getRunningBacks() {
@@ -28,13 +32,22 @@ public class RunningBackService {
 
   public Collection<RunningBack> getRunningBacksBySeasonAndOrWeek(Short season, Short week) {
 
+    Collection<RunningBack> runningBacks;
+    LeagueScoring leagueScoring = leagueService.getLeague();
+
     if(season != null && week != null) {
-      return repository.findAllBySeasonAndWeek(season, week);
+      runningBacks =  repository.findAllBySeasonAndWeek(season, week);
     } else if (season != null) {
-      return repository.findAllBySeason(season);
+      runningBacks = repository.findAllBySeason(season);
     } else {
-      return repository.findAll();
+      runningBacks = repository.findAll();
     }
+
+    runningBacks.parallelStream().forEach(rb -> {
+      rb.fantasyPoints = leagueScoring.calculateFantasyPts(rb);
+    });
+
+    return runningBacks;
   }
 
   @Async

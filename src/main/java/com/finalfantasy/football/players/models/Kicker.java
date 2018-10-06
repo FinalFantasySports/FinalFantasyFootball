@@ -3,7 +3,6 @@ package com.finalfantasy.football.players.models;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalfantasy.football.stats.YahooLeagueScoring;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -17,10 +16,10 @@ public class Kicker extends AbstractPlayer implements Player {
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
 
-  short extraPoint;
-  short fieldGoalsUnder40;
-  short fieldGoals40_49;
-  short fieldGoal50orOver;
+  public short extraPoint;
+  public short fieldGoalsUnder40;
+  public short fieldGoals40_49;
+  public short getFieldGoalsOver50;
 
   public Kicker() {
     super(Position.K);
@@ -60,17 +59,13 @@ public class Kicker extends AbstractPlayer implements Player {
           this.fieldGoals40_49 = Short.parseShort(value);
           break;
         case 39:
-          this.fieldGoal50orOver = Short.parseShort(value);
+          this.getFieldGoalsOver50 = Short.parseShort(value);
           break;
         default:
-          log.warn("Did not Find stat for key: {} value: {}", key, value);
+//          log.warn("Did not Find stat for key: {} value: {}", key, value);
           break;
       }
     });
   }
 
-  @Override
-  public void calculateYahooFantasyPoints(YahooLeagueScoring yahooLeagueScoring) {
-
-  }
 }

@@ -1,6 +1,8 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.league.LeagueScoring;
+import com.finalfantasy.football.league.LeagueService;
 import com.finalfantasy.football.players.models.TightEnd;
 import com.finalfantasy.football.players.repositories.TightEndRepository;
 import org.slf4j.Logger;
@@ -17,9 +19,11 @@ public class TightEndService {
   private static final Logger log = LoggerFactory.getLogger(TightEndService.class);
 
   private final TightEndRepository repository;
+  private final LeagueService leagueService;
 
-  public TightEndService(final TightEndRepository repository) {
+  public TightEndService(final TightEndRepository repository, final LeagueService leagueService) {
     this.repository = repository;
+    this.leagueService = leagueService;
   }
 
   public Collection<TightEnd> getTightEnds() {
@@ -28,13 +32,22 @@ public class TightEndService {
 
   public Collection<TightEnd> getTightEndsBySeasonAndOrWeek(Short season, Short week) {
 
+    Collection<TightEnd> tightEnds;
+    LeagueScoring leagueScoring = leagueService.getLeague();
+
     if(season != null && week != null) {
-      return repository.findAllBySeasonAndWeek(season, week);
+      tightEnds = repository.findAllBySeasonAndWeek(season, week);
     } else if (season != null) {
-      return repository.findAllBySeason(season);
+      tightEnds = repository.findAllBySeason(season);
     } else {
-      return repository.findAll();
+      tightEnds = repository.findAll();
     }
+
+    tightEnds.parallelStream().forEach(tightEnd -> {
+      tightEnd.fantasyPoints = leagueScoring.calculateFantasyPts(tightEnd);
+    });
+
+    return tightEnds;
   }
 
   @Async

@@ -1,6 +1,8 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.league.LeagueScoring;
+import com.finalfantasy.football.league.LeagueService;
 import com.finalfantasy.football.players.models.WideReceiver;
 import com.finalfantasy.football.players.repositories.WideReceiverRepository;
 import org.slf4j.Logger;
@@ -17,9 +19,11 @@ public class WideReceiverService {
   private static final Logger log = LoggerFactory.getLogger(WideReceiverService.class);
 
   private final WideReceiverRepository repository;
+  private final LeagueService leagueService;
 
-  public WideReceiverService(final WideReceiverRepository repository) {
+  public WideReceiverService(final WideReceiverRepository repository, final LeagueService leagueService) {
     this.repository = repository;
+    this.leagueService = leagueService;
   }
 
   public Collection<WideReceiver> getWideReceivers() {
@@ -28,13 +32,22 @@ public class WideReceiverService {
 
   public Collection<WideReceiver> getWideReceiversBySeasonAndOrWeek(Short season, Short week) {
 
+    Collection<WideReceiver> wideReceivers;
+    LeagueScoring leagueScoring = leagueService.getLeague();
+
     if(season != null && week != null) {
-      return repository.findAllBySeasonAndWeek(season, week);
+      wideReceivers =  repository.findAllBySeasonAndWeek(season, week);
     } else if (season != null) {
-      return repository.findAllBySeason(season);
+      wideReceivers = repository.findAllBySeason(season);
     } else {
-      return repository.findAll();
+      wideReceivers = repository.findAll();
     }
+
+    wideReceivers.parallelStream().forEach(wr -> {
+      wr.fantasyPoints = leagueScoring.calculateFantasyPts(wr);
+    });
+
+    return wideReceivers;
   }
 
   @Async

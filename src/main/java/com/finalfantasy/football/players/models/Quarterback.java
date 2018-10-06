@@ -3,7 +3,6 @@ package com.finalfantasy.football.players.models;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalfantasy.football.stats.YahooLeagueScoring;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -20,7 +19,7 @@ public class Quarterback extends AbstractOffensivePlayer implements Player {
   public float passingYds;
   public short passingTds;
   public short passingInt;
-  public short sacked;
+  public short qbSacks;
 
   public Quarterback() {
     super(Position.QB);
@@ -59,17 +58,13 @@ public class Quarterback extends AbstractOffensivePlayer implements Player {
           this.passingInt = Short.parseShort(value);
           break;
         case 8:
-          this.sacked = Short.parseShort(value);
+          this.qbSacks = Short.parseShort(value);
           break;
         default:
-            log.warn("Did not Find stat for key: {} value: {}", key, value);
+//            log.warn("Did not Find stat for key: {} value: {}", key, value);
             break;
       }
     });
   }
 
-  @Override
-  public void calculateYahooFantasyPoints(YahooLeagueScoring yahooLeagueScoring) {
-
-  }
 }

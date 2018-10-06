@@ -3,7 +3,6 @@ package com.finalfantasy.football.players.models;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalfantasy.football.stats.YahooLeagueScoring;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -17,23 +16,23 @@ public class DefenseSpecialTeams extends AbstractPlayer implements Player {
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
 
-  short sacks;
-  short interception;
-  short fumbleRecovery;
-  short touchdown;
-  short safety;
-  short blockKick;
-  short pointsAllowed;
-  short pointsAllowed0;
-  short pointsAllowed1_6;
-  short pointsAllowed7_13;
-  short pointsAllowed14_20;
-  short pointsAllowed21_27;
-  short pointsAllowed28_34;
-  short pointsAllowedOver35;
-  float ydsAllowed;
-  short fourthDownStops;
-  short extraPointReturned;
+  public short defensiveSack;
+  public short defensiveInterception;
+  public short fumbleRecovery;
+  public short touchdown;
+  public short safety;
+  public short blockKick;
+  public short pointsAllowed;
+  public short pointsAllowed0;
+  public short pointsAllowed1_6;
+  public short pointsAllowed7_13;
+  public short pointsAllowed14_20;
+  public short pointsAllowed21_27;
+  public short pointsAllowed28_34;
+  public short pointsAllowedOver35;
+  public float ydsAllowed;
+  public short fourthDownStops;
+  public short extraPointReturned;
 
   public DefenseSpecialTeams() {
     super(Position.DEF);
@@ -62,13 +61,13 @@ public class DefenseSpecialTeams extends AbstractPlayer implements Player {
     map.forEach((key, value) -> {
       switch(Integer.parseInt(key)) {
         case 73:
-          this.interception = Short.parseShort(value);
+          this.defensiveInterception = Short.parseShort(value);
           break;
         case 75:
           this.fumbleRecovery = Short.parseShort(value);
           break;
         case 72:
-          this.sacks = Short.parseShort(value);
+          this.defensiveSack = Short.parseShort(value);
           break;
         case 80:
           this.safety = Short.parseShort(value);
@@ -109,14 +108,10 @@ public class DefenseSpecialTeams extends AbstractPlayer implements Player {
           this.ydsAllowed = Float.parseFloat(value);
           break;
         default:
-          log.warn("Did not Find stat for key: {} value: {}", key, value);
+//          log.warn("Did not Find stat for key: {} value: {}", key, value);
           break;
       }
     });
   }
 
-  @Override
-  public void calculateYahooFantasyPoints(YahooLeagueScoring yahooLeagueScoring) {
-
-  }
 }

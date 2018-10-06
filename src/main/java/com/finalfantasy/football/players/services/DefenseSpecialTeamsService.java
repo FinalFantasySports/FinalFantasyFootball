@@ -1,6 +1,8 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.league.LeagueScoring;
+import com.finalfantasy.football.league.LeagueService;
 import com.finalfantasy.football.players.models.DefenseSpecialTeams;
 import com.finalfantasy.football.players.repositories.DefenseSpecialTeamsRepository;
 import org.slf4j.Logger;
@@ -17,9 +19,11 @@ public class DefenseSpecialTeamsService {
   private static final Logger log = LoggerFactory.getLogger(DefenseSpecialTeamsService.class);
 
   private final DefenseSpecialTeamsRepository repository;
+  private final LeagueService leagueService;
 
-  public DefenseSpecialTeamsService(final DefenseSpecialTeamsRepository repository) {
+  public DefenseSpecialTeamsService(final DefenseSpecialTeamsRepository repository, final LeagueService leagueService) {
     this.repository = repository;
+    this.leagueService = leagueService;
   }
 
   public Collection<DefenseSpecialTeams> getDefenseSpecialTeamss() {
@@ -28,13 +32,22 @@ public class DefenseSpecialTeamsService {
 
   public Collection<DefenseSpecialTeams> getDefenseSpecialTeamssBySeasonAndOrWeek(Short season, Short week) {
 
+    Collection<DefenseSpecialTeams> defenseSpecialTeams;
+    LeagueScoring leagueScoring = leagueService.getLeague();
+
     if(season != null && week != null) {
-      return repository.findAllBySeasonAndWeek(season, week);
+      defenseSpecialTeams =  repository.findAllBySeasonAndWeek(season, week);
     } else if (season != null) {
-      return repository.findAllBySeason(season);
+      defenseSpecialTeams = repository.findAllBySeason(season);
     } else {
-      return repository.findAll();
+      defenseSpecialTeams = repository.findAll();
     }
+
+    defenseSpecialTeams.parallelStream().forEach(defense -> {
+      defense.fantasyPoints = leagueScoring.calculateFantasyPts(defense);
+    });
+
+    return defenseSpecialTeams;
   }
 
   @Async
