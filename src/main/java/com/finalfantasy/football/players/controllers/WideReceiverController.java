@@ -2,6 +2,7 @@ package com.finalfantasy.football.players.controllers;
 
 import com.finalfantasy.football.players.models.WideReceiver;
 import com.finalfantasy.football.players.services.WideReceiverService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,11 @@ public class WideReceiverController {
 
   @GetMapping
   public ResponseEntity<Collection<WideReceiver>> getWideReceiversBySeasonAndOrWeek(@RequestParam(required = false) Short season, @RequestParam(required = false) Short week) {
-    return ResponseEntity.ok(service.getWideReceiversBySeasonAndOrWeek(season, week));
+    try {
+      return ResponseEntity.ok(service.getWideReceiversBySeasonAndOrWeek(season, week));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
+    }
   }
 }

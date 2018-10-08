@@ -11,7 +11,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
 
 @Service
 public class RunningBackService {
@@ -20,17 +22,19 @@ public class RunningBackService {
 
   private final RunningBackRepository repository;
   private final LeagueService leagueService;
+  private final ExecutorService executorService;
 
-  public RunningBackService(final RunningBackRepository repository, final LeagueService leagueService) {
+  public RunningBackService(final RunningBackRepository repository, final LeagueService leagueService, final ExecutorService executorService) {
     this.repository = repository;
     this.leagueService = leagueService;
+    this.executorService = executorService;
   }
 
   public Collection<RunningBack> getRunningBacks() {
     return repository.findAll();
   }
 
-  public Collection<RunningBack> getRunningBacksBySeasonAndOrWeek(Short season, Short week) {
+  public Collection<RunningBack> getRunningBacksBySeasonAndOrWeek(Short season, Short week) throws Exception {
 
     Collection<RunningBack> runningBacks;
     LeagueScoring leagueScoring = leagueService.getLeague();
@@ -42,12 +46,11 @@ public class RunningBackService {
     } else {
       runningBacks = repository.findAll();
     }
-
     runningBacks.parallelStream().forEach(rb -> {
       rb.fantasyPoints = leagueScoring.calculateFantasyPts(rb);
     });
 
-    return runningBacks;
+    return leagueScoring.setValueBasedScore(new ArrayList(runningBacks));
   }
 
   @Async

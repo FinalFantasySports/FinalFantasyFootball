@@ -1,8 +1,8 @@
 package com.finalfantasy.football.players.controllers;
 
-import com.finalfantasy.football.players.models.Quarterback;
-import com.finalfantasy.football.players.services.QuarterbackService;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.finalfantasy.football.players.models.Player;
+import com.finalfantasy.football.players.services.PlayersService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,19 +13,16 @@ import java.util.Collection;
 @RequestMapping(value = "/players")
 public class PlayersController {
 
-  QuarterbackService quarterbackService;
+  private final PlayersService playersService;
 
-  public PlayersController(final QuarterbackService quarterbackService) {
-    this.quarterbackService = quarterbackService;
+  public PlayersController(final PlayersService playersService) {
+    this.playersService = playersService;
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  public String getPlayers() {
-    return "Yo Playa!";
+  public ResponseEntity<Collection<Player>> getPlayers() throws Exception {
+
+    return ResponseEntity.ok(playersService.getAllPlayers());
   }
 
-  @GetMapping(value = "/qb")
-  public Collection<Quarterback> getQuarterbacks() {
-    return quarterbackService.getQuarterbacks();
-  }
 }
