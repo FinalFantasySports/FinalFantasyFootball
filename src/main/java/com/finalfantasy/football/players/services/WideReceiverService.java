@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -30,7 +31,7 @@ public class WideReceiverService {
     return repository.findAll();
   }
 
-  public Collection<WideReceiver> getWideReceiversBySeasonAndOrWeek(Short season, Short week) {
+  public Collection<WideReceiver> getWideReceiversBySeasonAndOrWeek(Short season, Short week) throws Exception {
 
     Collection<WideReceiver> wideReceivers;
     LeagueScoring leagueScoring = leagueService.getLeague();
@@ -47,7 +48,7 @@ public class WideReceiverService {
       wr.fantasyPoints = leagueScoring.calculateFantasyPts(wr);
     });
 
-    return wideReceivers;
+    return leagueScoring.setValueBasedScore(new ArrayList(wideReceivers));
   }
 
   @Async

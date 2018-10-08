@@ -1,10 +1,28 @@
 package com.finalfantasy.football.league;
 
 import com.finalfantasy.football.players.models.*;
+import com.finalfantasy.football.stats.SortByFantasyPoints;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class YahooLeagueScoring implements LeagueScoring {
 
+  private static final Logger log = LoggerFactory.getLogger(YahooLeagueScoring.class);
+
   //private static final Logger log = LoggerFactory.getLogger(YahooLeagueScoring.class);
+
+  private final static short startingQBs = 1;
+  private final static short startingRBs = 2;
+  private final static short startingWRs = 2;
+  private final static short startingTEs = 1;
+  private final static short startingKs = 1;
+  private final static short startingDefs = 1;
+
+  private final static short fantasyTeams = 10;
 
   private final static short passingYds = 25;
   private final static short passingTds = 4;
@@ -98,5 +116,40 @@ public class YahooLeagueScoring implements LeagueScoring {
     }
 
     return fanPoints;
+  }
+
+  @Override
+  public Collection<Player> setValueBasedScore(List<Player> players) throws Exception {
+
+    log.debug("player list size: {}", players.size());
+
+    players = players.stream().sorted(new SortByFantasyPoints()).collect(Collectors.toList());
+    float startingPlayerAtFloorFpts;
+
+    if(players.get(0) instanceof Quarterback) {
+      startingPlayerAtFloorFpts = players.get(getTotalStarting(startingQBs)).getFantasyPoints();
+    } else if(players.get(0) instanceof RunningBack) {
+      log.debug("player name and fan score: ", ((RunningBack) players.get(getTotalStarting(startingRBs))).name, ((RunningBack) players.get(startingRBs)).fantasyPoints);
+      startingPlayerAtFloorFpts = players.get(getTotalStarting(startingRBs)).getFantasyPoints();
+    } else if(players.get(0) instanceof WideReceiver) {
+      startingPlayerAtFloorFpts = players.get(getTotalStarting(startingWRs)).getFantasyPoints();
+    } else if(players.get(0) instanceof TightEnd) {
+      startingPlayerAtFloorFpts = players.get(getTotalStarting(startingTEs)).getFantasyPoints();
+    } else if(players.get(0) instanceof Kicker) {
+      startingPlayerAtFloorFpts = players.get(getTotalStarting(startingKs)).getFantasyPoints();
+    } else if(players.get(0) instanceof DefenseSpecialTeams) {
+      startingPlayerAtFloorFpts = players.get(getTotalStarting(startingDefs)).getFantasyPoints();
+    } else {
+      throw new Exception();
+    }
+    for(Player player : players) {
+      log.debug("player fan points {} startingFloor {}",  player.getFantasyPoints(), startingPlayerAtFloorFpts);
+      player.setValueBasedDraftScore(player.getFantasyPoints() - startingPlayerAtFloorFpts);
+    }
+    return players;
+  }
+
+  private int getTotalStarting(int starters) {
+    return starters * fantasyTeams;
   }
 }

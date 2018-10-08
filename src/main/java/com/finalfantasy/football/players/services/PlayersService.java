@@ -1,12 +1,19 @@
 package com.finalfantasy.football.players.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.finalfantasy.football.players.models.DefaultPlayer;
+import com.finalfantasy.football.players.models.*;
 import com.finalfantasy.football.players.repositories.PlayerRepository;
+import com.finalfantasy.football.stats.SortedByVBD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayersService {
@@ -20,11 +27,12 @@ public class PlayersService {
   private final KickerService kickerService;
   private final DefenseSpecialTeamsService defenseSpecialTeamsService;
   private final PlayerRepository playerRepository;
+  private final ExecutorService executorService;
 
   public PlayersService(final QuarterbackService quarterbackService,
     final RunningBackService runningBackService, final WideReceiverService wideReceiverService,
     final KickerService kickerService, final TightEndService tightEndService,
-    final DefenseSpecialTeamsService defenseSpecialTeamsService, final PlayerRepository playerRepository) {
+    final DefenseSpecialTeamsService defenseSpecialTeamsService, final PlayerRepository playerRepository, final ExecutorService executorService) {
     this.quarterbackService = quarterbackService;
     this.runningBackService = runningBackService;
     this.wideReceiverService = wideReceiverService;
@@ -32,6 +40,43 @@ public class PlayersService {
     this.kickerService = kickerService;
     this.defenseSpecialTeamsService = defenseSpecialTeamsService;
     this.playerRepository = playerRepository;
+    this.executorService = executorService;
+  }
+
+  public Collection<Player> getAllPlayers() throws Exception {
+
+    Future<Collection<Quarterback>> futureQuarterbacks = executorService.submit(() -> {
+      return quarterbackService.getQuarterbacksBySeasonAndOrWeek(null,null );
+    });
+    Future<Collection<RunningBack>> futureRunningBacks = executorService.submit(() -> {
+      return runningBackService.getRunningBacksBySeasonAndOrWeek(null,null );
+    });
+    Future<Collection<WideReceiver>> futureWideReceivers = executorService.submit(() -> {
+      return wideReceiverService.getWideReceiversBySeasonAndOrWeek(null,null );
+    });
+    Future<Collection<TightEnd>> futureTightEnds = executorService.submit(() -> {
+      return tightEndService.getTightEndsBySeasonAndOrWeek(null,null );
+    });
+    Future<Collection<Kicker>> futureKickers = executorService.submit(() -> {
+      return kickerService.getKickersBySeasonAndOrWeek(null,null );
+    });
+    Future<Collection<DefenseSpecialTeams>> futureDefenseSpecialTeamss = executorService.submit(() -> {
+      return defenseSpecialTeamsService.getDefenseSpecialTeamssBySeasonAndOrWeek(null,null );
+    });
+
+    while(!(futureQuarterbacks.isDone() && futureRunningBacks.isDone() && futureDefenseSpecialTeamss.isDone() &&
+        futureKickers.isDone() && futureTightEnds.isDone() && futureWideReceivers.isDone())) {
+      log.debug("Getting Players...");
+    }
+
+    Collection<Player> players = new ArrayList<>(futureQuarterbacks.get());
+    players.addAll(futureRunningBacks.get());
+    players.addAll(futureWideReceivers.get());
+    players.addAll(futureTightEnds.get());
+    players.addAll(futureKickers.get());
+    players.addAll(futureDefenseSpecialTeamss.get());
+
+    return players.stream().sorted(new SortedByVBD()).collect(Collectors.toList());
   }
 
   @Async

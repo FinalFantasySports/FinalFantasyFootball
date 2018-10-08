@@ -2,6 +2,7 @@ package com.finalfantasy.football.players.controllers;
 
 import com.finalfantasy.football.players.models.Kicker;
 import com.finalfantasy.football.players.services.KickerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,11 @@ public class KickerController {
 
   @GetMapping
   public ResponseEntity<Collection<Kicker>> getKickersBySeasonAndOrWeek(@RequestParam(required = false) Short season, @RequestParam(required = false) Short week) {
-    return ResponseEntity.ok(service.getKickersBySeasonAndOrWeek(season, week));
+    try {
+      return ResponseEntity.ok(service.getKickersBySeasonAndOrWeek(season, week));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
+    }
   }
 }

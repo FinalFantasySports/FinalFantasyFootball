@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -30,7 +31,7 @@ public class KickerService {
     return repository.findAll();
   }
 
-  public Collection<Kicker> getKickersBySeasonAndOrWeek(Short season, Short week) {
+  public Collection<Kicker> getKickersBySeasonAndOrWeek(Short season, Short week) throws Exception {
 
     Collection<Kicker> kickers;
     LeagueScoring leagueScoring = leagueService.getLeague();
@@ -47,7 +48,7 @@ public class KickerService {
       kicker.fantasyPoints = leagueScoring.calculateFantasyPts(kicker);
     });
 
-    return kickers;
+    return leagueScoring.setValueBasedScore(new ArrayList(kickers));
   }
 
   @Async

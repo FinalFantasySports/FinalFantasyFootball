@@ -34,6 +34,8 @@ public abstract class AbstractPlayer extends AbstractModel implements Player {
   public float apiWeekProjectedPts;
   @Transient
   public float fantasyPoints;
+  @Transient
+  public float valueBaseDraftScore;
   public Position position;
 
   public AbstractPlayer(Position position) {
@@ -59,4 +61,23 @@ public abstract class AbstractPlayer extends AbstractModel implements Player {
     });
   }
 
+  @Override
+  public int getFantasyPointsAsInt() {
+    return Math.round(this.fantasyPoints);
+  }
+
+  @Override
+  public float getFantasyPoints() {
+    return this.fantasyPoints;
+  }
+
+  @Override
+  public void setValueBasedDraftScore(float vbd){
+    this.valueBaseDraftScore = vbd;
+  }
+
+  @Override
+  public float getValueBasedDraftScore(){
+    return this.valueBaseDraftScore;
+  }
 }

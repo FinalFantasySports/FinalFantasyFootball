@@ -10,6 +10,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Configuration
 @EnableJpaRepositories
@@ -31,5 +33,10 @@ public class FootballConfiguration {
     executor.setQueueCapacity(50839);
 
     return executor;
+  }
+
+  @Bean(name = "executorService")
+  public ExecutorService executorService() {
+    return Executors.newWorkStealingPool();
   }
 }
