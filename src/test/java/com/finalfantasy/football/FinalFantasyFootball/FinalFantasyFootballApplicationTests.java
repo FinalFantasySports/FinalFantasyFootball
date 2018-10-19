@@ -1,4 +1,4 @@
-package com.finalfantasy.football;
+package com.finalfantasy.football.FinalFantasyFootball;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FootballApplicationTests {
+public class FinalFantasyFootballApplicationTests {
 
 	@Test
 	public void contextLoads() {
