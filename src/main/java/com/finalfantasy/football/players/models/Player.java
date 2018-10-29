@@ -1,14 +1,30 @@
 package com.finalfantasy.football.players.models;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.finalfantasy.football.AbstractModel;
+import com.finalfantasy.football.stats.Stat;
 
-import java.io.IOException;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
 
-public interface Player {
+@Entity
+public class Player extends AbstractModel implements Serializable {
 
-  int getFantasyPointsAsInt();
-  float getFantasyPoints();
-  void addStats(JsonNode stats) throws IOException;
-  void setValueBasedDraftScore(float vbd);
-  float getValueBasedDraftScore();
+  @Id
+  public long id;
+  public String esbid;
+  public String gsisPlayerId;
+  public String name;
+  Position position;
+  public String teamAbbr;
+
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JoinColumn(name = "player_id")
+  public Collection<Stat> stat;
+
+  public Player() { }
+
+  public Player(Position position) {
+    this.position = position;
+  }
 }

@@ -6,12 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class StatKey extends AbstractModel implements Data {
-
+public class StatKey extends AbstractModel {
   @Id
   public int id;
   public String abbr;
   public String name;
   public String shortName;
-
 }

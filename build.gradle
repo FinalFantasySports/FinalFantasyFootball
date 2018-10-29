@@ -8,9 +8,6 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath 'com.netflix.nebula:gradle-dependency-lock-plugin:4.+'
-    classpath 'com.netflix.nebula:nebula-dependency-recommender:5.1.0'
-    classpath "com.netflix.nebula:gradle-metrics-plugin:7.0.2"
 	}
 }
 
@@ -19,9 +16,6 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'base'
-apply plugin: "nebula.metrics"
-apply plugin: 'nebula.dependency-lock'
-apply plugin: 'nebula.dependency-recommender'
 
 group = 'com.finalfantasy.football'
 version = '0.4.1-SNAPSHOT'

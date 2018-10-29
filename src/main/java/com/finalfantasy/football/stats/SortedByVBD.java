@@ -7,6 +7,7 @@ import java.util.Comparator;
 public class SortedByVBD implements Comparator<Player> {
   @Override
   public int compare(Player o1, Player o2) {
-    return Math.round(o2.getValueBasedDraftScore() - o1.getValueBasedDraftScore());
+//    return Math.round(o2.getValueBasedDraftScore() - o1.getValueBasedDraftScore());
+    return 0;
   }
 }

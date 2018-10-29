@@ -2,7 +2,6 @@ package com.finalfantasy.football;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalfantasy.football.stats.StatKey;
-import com.finalfantasy.football.stats.WeekData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -59,22 +58,21 @@ public class FantasyApiConfiguration {
   }
 
   // url = http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2018&week=1&format=json
-  public String getPlayerStatsByWeekRoute(WeekData weekData) {
+  public String getPlayerStatsByWeekRoute(short season, short week) {
     StringBuilder stringBuilder = new StringBuilder(apiDomain);
     stringBuilder.append(playersRoute);
     stringBuilder.append(statsRoute);
     stringBuilder.append(query);
     stringBuilder.append(statTypeQuery);
-    log.debug("weekData.statType {}", weekData.statType);
-    stringBuilder.append(weekData.statType);
+    stringBuilder.append("weekStats");
     stringBuilder.append(and);
     stringBuilder.append(seasonQuery);
-    log.debug("weekData.season {}", weekData.season);
-    stringBuilder.append(weekData.season);
+    log.debug("weekData.season {}", season);
+    stringBuilder.append(season);
     stringBuilder.append(and);
     stringBuilder.append(weekQuery);
-    log.debug("weekData.week {}", weekData.week);
-    stringBuilder.append(weekData.week);
+    log.debug("weekData.week {}", week);
+    stringBuilder.append(week);
     stringBuilder.append(and);
     stringBuilder.append(jsonFormat);
     return stringBuilder.toString();
