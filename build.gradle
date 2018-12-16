@@ -18,7 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'base'
 
 group = 'com.finalfantasy.football'
-version = '0.4.1-SNAPSHOT'
+version = '0.5.0'
 sourceCompatibility = 1.11
 
 repositories {
