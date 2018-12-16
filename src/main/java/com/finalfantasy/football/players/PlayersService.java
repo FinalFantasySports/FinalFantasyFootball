@@ -27,9 +27,11 @@ public class PlayersService {
     player.year = year;
     player.id = Long.parseLong(playerMap.get("id").toString());
     player.position = playerMap.getOrDefault("position", "Not Present").toString();
-    playerMap.keySet().iterator().forEachRemaining(key ->
-      player.setProperty(key.toString(),playerMap.get(key) )
-    );
+    playerMap.keySet().forEach(key -> {
+      if(playerMap.get(key) != null) {
+        player.setProperty(key.toString(), playerMap.get(key).toString());
+      }
+    });
     log.info("Saving Player: {}", player.toString());
     repository.save(player);
   }

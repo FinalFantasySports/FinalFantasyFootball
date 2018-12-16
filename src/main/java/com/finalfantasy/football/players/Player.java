@@ -38,37 +38,34 @@ public class Player extends AbstractModel {
     super();
   }
 
-  void setProperty(String key, Object value) {
-    if (value != null && key != null) {
-      var stringValue = value.toString();
-      switch (key) {
-        case depthChartOrderKey:
-          this.depthChartOrder = Short.parseShort(stringValue);
-          break;
-        case numberOfAddsKey:
-          this.numberOfAdds = Short.parseShort(stringValue);
-          break;
-        case numberOfDropsKey:
-          this.numberOfDrops = Short.parseShort(stringValue);
-          break;
-        case esbidKey:
-          this.esbid = stringValue;
-          break;
-        case gsisPlayerIdKey:
-          this.gsisPlayerId = stringValue;
-          break;
-        case firstNameKey:
-          this.firstName = stringValue;
-          break;
-        case lastNameKey:
-          this.lastName = stringValue;
-          break;
-        case teamAbbrKey:
-          this.teamAbbr = stringValue;
-          break;
-        default:
-          break;
-      }
+  void setProperty(String key, String value) {
+    switch (key) {
+      case depthChartOrderKey:
+        this.depthChartOrder = Short.parseShort(value);
+        break;
+      case numberOfAddsKey:
+        this.numberOfAdds = Short.parseShort(value);
+        break;
+      case numberOfDropsKey:
+        this.numberOfDrops = Short.parseShort(value);
+        break;
+      case esbidKey:
+        this.esbid = value;
+        break;
+      case gsisPlayerIdKey:
+        this.gsisPlayerId = value;
+        break;
+      case firstNameKey:
+        this.firstName = value;
+        break;
+      case lastNameKey:
+        this.lastName = value;
+        break;
+      case teamAbbrKey:
+        this.teamAbbr = value;
+        break;
+      default:
+        break;
     }
   }
 
