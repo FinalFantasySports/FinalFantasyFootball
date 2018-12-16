@@ -1,8 +1,8 @@
-package com.finalfantasy.football.stats;
+package com.finalfantasy.football.players;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StatKeyRepository extends JpaRepository<StatKey, Integer> {
+public interface PlayersRepository extends JpaRepository<Player, Long> {
 }

@@ -1,18 +1,17 @@
 package com.finalfantasy.football.api;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalfantasy.football.FantasyApiConfiguration;
-import com.finalfantasy.football.stats.StatKey;
-import com.finalfantasy.football.stats.StatKeyRepository;
+import com.finalfantasy.football.NflFantasyApiConfiguration;
+import com.finalfantasy.football.players.PlayersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
+import static java.util.Objects.nonNull;
 
 @Service
 public class ApiService {
@@ -20,36 +19,32 @@ public class ApiService {
   private static final Logger log = LoggerFactory.getLogger(ApiService.class);
 
   private final RestTemplate restTemplate;
-  private final FantasyApiConfiguration apiConfiguration;
-  private final StatKeyRepository statKeyRepository;
+  private final NflFantasyApiConfiguration apiConfiguration;
+  private final PlayersService playersService;
 
-  public ApiService(final RestTemplate restTemplate, final FantasyApiConfiguration apiConfiguration, final StatKeyRepository statKeyRepository) {
+  public ApiService(final RestTemplate restTemplate, final NflFantasyApiConfiguration apiConfiguration, final PlayersService playersService) {
     this.restTemplate = restTemplate;
     this.apiConfiguration = apiConfiguration;
-    this.statKeyRepository = statKeyRepository;
+    this.playersService = playersService;
   }
 
-  @PostConstruct
-  protected void getStatKey() throws IOException {
-    var response = restTemplate.getForObject(apiConfiguration.getStatKeyRoute(),String.class);
-    var objectMapper = new ObjectMapper();
-    var root = objectMapper.readTree(response);
-    root.path("stats").iterator().forEachRemaining(statKeyNode -> {
-      var statKey = new StatKey();
-      statKey.id = statKeyNode.path("id").asInt();
-      statKey.abbr = statKeyNode.path("abbr").textValue();
-      statKey.name = statKeyNode.path("name").textValue();
-      statKey.shortName = statKeyNode.path("shortName").textValue();
-      statKeyRepository.save(statKey);
-    });
+  public void getPlayers(short season) {
+    var url = apiConfiguration.getPlayerInfoRoute(season);
+    log.debug("Getting players for the {} season from url: {}", season, url);
+    var response = restTemplate.getForObject(url, Map.class);
+    if (nonNull(response)) {
+      var playersCollObect = response.get("players");
+      var mapper = new ObjectMapper();
+      var playersCollection = mapper.convertValue(playersCollObect, Collection.class);
+      log.debug("Sending off player collection to sorted: {}", playersCollection.toString());
+      sortPlayers(playersCollection, season);
+    }
+
+
   }
 
-  public JsonNode getPlayerStatsByWeekRoute(short season, short week) throws IOException {
-    var url = apiConfiguration.getPlayerStatsByWeekRoute(season, week);
-    log.debug("url={}", url);
-    var response = restTemplate.getForObject(url, String.class);
-    var objectMapper = new ObjectMapper();
-    var root = objectMapper.readTree(response);
-    return root.path("players");
+  private void sortPlayers(Collection<Map> playerMaps, short season) {
+    log.debug("sorting playerMaps: {}", playerMaps.toString());
+    playerMaps.stream().forEach( mapOfPlayer -> playersService.savePlayerFromMap(mapOfPlayer, season));
   }
 }

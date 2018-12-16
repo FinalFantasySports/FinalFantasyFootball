@@ -1,0 +1,9 @@
+<root>
+    <item name='java.util.LinkedHashMap V getOrDefault(java.lang.Object, V)'>
+        <annotation
+                name='org.jetbrains.annotations.Contract'>
+            <val name="pure"
+                 val="true"/>
+        </annotation>
+    </item>
+</root>

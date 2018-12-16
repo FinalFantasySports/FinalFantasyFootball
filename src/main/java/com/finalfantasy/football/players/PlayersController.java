@@ -1,14 +1,10 @@
 package com.finalfantasy.football.players;
 
-import com.finalfantasy.football.exceptions.NoPlayersFoundException;
-import com.finalfantasy.football.players.models.Position;
-import com.finalfantasy.football.stats.StatsService;
+import com.finalfantasy.football.api.ApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @CrossOrigin
 @RestController
@@ -18,33 +14,25 @@ public class PlayersController {
   private static final Logger log = LoggerFactory.getLogger(PlayersController.class);
 
   private final PlayersService playersService;
-  private final StatsService statsService;
+  private final ApiService apiService;
 
-  public PlayersController(final PlayersService playersService, final StatsService statsService) {
+  public PlayersController(final PlayersService playersService, final ApiService ApiService) {
     this.playersService = playersService;
-    this.statsService = statsService;
+    this.apiService = ApiService;
   }
 
-  @RequestMapping(method = RequestMethod.GET)
-  public ResponseEntity getPlayers(@RequestParam short season, @RequestParam short week, @RequestParam(required = false) Position position) {
+  @GetMapping
+  public ResponseEntity getPlayers(@RequestParam short season, @RequestParam(required = false) Short week,
+      @RequestParam(required = false) Position position) {
+//    try {
+//      return ResponseEntity.ok(playersService.getPlayers(season, week, position));
+//    } catch (NoPlayersFoundException e) {
+//      log.warn("players not found in database", e);
+//      apiService.getPlayers(season);
+//      return ResponseEntity.status(204).body("Retrieving players from api. Try again shortly.");
+//    }
 
-    try {
-      return ResponseEntity.ok(playersService.getPlayers(season, week, position));
-    } catch (NoPlayersFoundException e) {
-      log.warn("players not found in database", e);
-      try {
-        return ResponseEntity.ok(playersService.getPlayers( season, week , position));
-      } catch (IOException e1) {
-        e1.printStackTrace();
-        return ResponseEntity.status(500).build();
-      } catch (NoPlayersFoundException e1) {
-        e1.printStackTrace();
-        return ResponseEntity.noContent().build();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-      return ResponseEntity.status(500).build();
-    }
+    apiService.getPlayers(season);
+    return ResponseEntity.status(204).body("Retrieving players from api. Try again shortly.");
   }
-
 }
