@@ -1,18 +1,36 @@
 package com.finalfantasy.football;
 
-import org.springframework.context.annotation.Configuration;
+import static java.util.Objects.nonNull;
 
-@Configuration
 public class NflFantasyApiConfiguration {
 
   private final static String apiDomain = "http://api.fantasy.nfl.com/v1";
   private static final String playersRoute = "/players";
   private static final String researchInfo = "/researchinfo?season=";
-  private static final String and = "&";
+  private static final byte and = '&';
+  private static final byte query = '?';
+  private final static String season = "season=";
+  private final static String week = "week=";
   private final static String jsonFormat = "format=json";
   private final static String count = "&count=500";
+  private final static String statsKeyRoute = "/game";
+  private final static String stats = "/stats";
+  private final static String statTypeWeek = "statType=weekStats";
 
-  public String getPlayerInfoRoute(short season) {
+
+  public static String getStatsFor(short seasonValue, Short weekValue) {
+    var url = apiDomain + playersRoute + stats + query + season + seasonValue + and + statTypeWeek + and;
+    if (nonNull(weekValue)) {
+      url += week + weekValue + and;
+    }
+    return url + jsonFormat;
+  }
+
+  public static String getPlayerInfoRoute(short season) {
     return apiDomain + playersRoute + researchInfo + season + and + jsonFormat + count;
+  }
+
+  public static String getStatsKeyRoute() {
+    return apiDomain + statsKeyRoute + stats + query + jsonFormat;
   }
 }

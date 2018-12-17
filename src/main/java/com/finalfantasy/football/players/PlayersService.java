@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Map;
 
+import static java.util.Objects.nonNull;
+
 @Service
 public class PlayersService {
 
@@ -37,7 +39,7 @@ public class PlayersService {
   public Collection<Player> getPlayers(short season, Short week, String position) throws NoPlayersFoundException {
     Collection<Player> players;
     if (season > 0) {
-      if (position != null) {
+      if (nonNull(position)) {
         players = repository.findAllByPositionAndYear(position, season);
       } else {
         players = repository.findAllByYear(season);
