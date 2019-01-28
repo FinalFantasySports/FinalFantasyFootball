@@ -30,7 +30,7 @@ import java.util.Date;
         typeClass = IntArrayType.class
     )
 })
-public class AbstractModel {
+public abstract class AbstractModel {
 
   @Column(name = "created_at", nullable = false, updatable = false)
   @CreatedDate
