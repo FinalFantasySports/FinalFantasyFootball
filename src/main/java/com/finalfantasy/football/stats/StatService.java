@@ -32,53 +32,42 @@ public class StatService {
   @Async
   public void saveStatsFromMap(Map playerMap, int season, int week) {
 
-    StatsByWeek statsByWeek = new StatsByWeek(week, season);
-    statsByWeek.nflFanPoints = Float.parseFloat(playerMap.getOrDefault("weekPts", 0).toString());
-    statsByWeek.projectedNflFanPoints = Float.parseFloat(
-        playerMap.getOrDefault("weekProjectedPts",0 ).toString());
-    var savedStatsByWeek = statsByWeekRepository.save(statsByWeek);
-    var statsMap = (Map<String, String>) playerMap.getOrDefault("stats", new HashMap<>());
-    var statKeys = statKeyService.getStatKeys();
-
-    var stats = statKeys.stream().filter(statKey ->
-        statsMap.containsKey(Integer.toString(statKey.id))).map(StatKey::toStat).collect(Collectors.toList());
-    savedStatsByWeek.stats = new ArrayList<>();
-
-    stats.forEach(stat -> {
-      log.debug("stat.statKeyId: {}", stat.statKeyId);
-      var statId = Long.toString(stat.statKeyId);
-      log.debug("statId: {}", statId);
-      var statValue = statsMap.get(statId);
-      log.debug("statValue: {}", statValue);
-      try {
-        stat.floatValue = Float.parseFloat(statValue);
-      } catch (NumberFormatException e) {
-        log.warn("Unable to parse statValue as float", e);
-        stat.stringValue = statValue;
-      }
-      stat.statsByWeek = savedStatsByWeek;
-      stat = statRepository.save(stat);
-      savedStatsByWeek.stats.add(stat);
-    });
-    var updatedStatsByWeek = statsByWeekRepository.save(savedStatsByWeek);
-
     if (playerMap.containsKey("id")) {
-      try {
-        var playerOpt = playersService.getPlayerById(Long.parseLong(playerMap.get("id").toString()));
-        playerOpt.ifPresent(player -> {
-          updatedStatsByWeek.player = player;
-          statsByWeekRepository.save(updatedStatsByWeek);
-          if (player.statsByWeeks != null) {
-            player.statsByWeeks.add(updatedStatsByWeek);
-          } else {
-            player.statsByWeeks = new ArrayList<>() {{add(updatedStatsByWeek);}};
+
+      var playerOpt = playersService.getPlayerById(Long.parseLong(playerMap.get("id").toString()));
+
+      playerOpt.ifPresent(player -> {
+
+        StatsByWeek statsByWeek = new StatsByWeek(week, season);
+        statsByWeek.player = player;
+        statsByWeek.nflFanPoints = Float.parseFloat(playerMap.getOrDefault("weekPts", 0).toString());
+        statsByWeek.projectedNflFanPoints = Float.parseFloat(
+            playerMap.getOrDefault("weekProjectedPts", 0).toString());
+
+        var statsMap = (Map<String, String>) playerMap.getOrDefault("stats", new HashMap<>());
+        var statKeys = statKeyService.getStatKeys();
+
+        var stats = statKeys.stream().filter(statKey ->
+            statsMap.containsKey(Integer.toString(statKey.id))).map(StatKey::toStat).collect(Collectors.toList());
+        var savedStatsByWeek = statsByWeekRepository.save(statsByWeek);
+        savedStatsByWeek.stats = new ArrayList<>();
+
+        stats.forEach(stat -> {
+          var statId = Long.toString(stat.statKeyId);
+          var statValue = statsMap.get(statId);
+          try {
+            stat.floatValue = Float.parseFloat(statValue);
+          } catch (NumberFormatException e) {
+            log.warn("Unable to parse statValue as float", e);
+            stat.stringValue = statValue;
           }
-          playersService.savePlayer(player);
+          stat.statsByWeek = savedStatsByWeek;
+          stat = statRepository.save(stat);
+          savedStatsByWeek.stats.add(stat);
         });
-      } catch (NumberFormatException e) {
-        log.error("Failed to retrieve player id", e);
-      }
+      });
+    } else {
+      log.debug("No id here: {}", playerMap.toString());
     }
-    statsByWeekRepository.save(updatedStatsByWeek);
   }
 }

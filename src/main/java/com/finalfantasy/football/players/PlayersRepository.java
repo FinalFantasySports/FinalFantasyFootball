@@ -9,4 +9,5 @@ import java.util.Collection;
 public interface PlayersRepository extends JpaRepository<Player, Long> {
   Collection<Player> findAllByPositionAndYear(String position, short year);
   Collection<Player> findAllByYear(short year);
+  Collection<Player> findTop200ByYear(short year);
 }

@@ -17,7 +17,7 @@ public class DataPopulationController {
 
   @PostMapping
   public ResponseEntity addStatsFromThisWeek(@RequestBody StatRequest statRequest) {
-    apiService.getStats(statRequest.season, statRequest.week);
+    apiService.getPlayers(statRequest.season, statRequest.week);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 }

@@ -1,11 +1,16 @@
 package com.finalfantasy.football.players;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.finalfantasy.football.AbstractModel;
 import com.finalfantasy.football.stats.StatsByWeek;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Collection;
 
 @Entity(name = "players")
@@ -34,7 +39,9 @@ public class Player extends AbstractModel {
   public Short depthChartOrder;
   public Short numberOfAdds;
   public Short numberOfDrops;
+
   @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JsonManagedReference
   public Collection<StatsByWeek> statsByWeeks;
 
   public Player() {
