@@ -4,10 +4,12 @@ import com.finalfantasy.football.exceptions.NoPlayersFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Objects.nonNull;
 
@@ -23,6 +25,7 @@ public class PlayersService {
     this.repository = repository;
   }
 
+  @Async
   public void savePlayerFromMap(Map playerMap, short year) {
 
     Player player = new Player();
@@ -34,6 +37,14 @@ public class PlayersService {
     );
     log.info("Saving Player: {}", player.toString());
     repository.save(player);
+  }
+
+  public void savePlayer(Player player) {
+    repository.save(player);
+  }
+
+  public Optional<Player> getPlayerById(long id) {
+    return repository.findById(id);
   }
 
   public Collection<Player> getPlayers(short season, Short week, String position) throws NoPlayersFoundException {
@@ -52,5 +63,4 @@ public class PlayersService {
     }
     return players;
   }
-
 }

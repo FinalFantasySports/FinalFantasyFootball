@@ -25,8 +25,8 @@ public class PlayersController {
   }
 
   @GetMapping
-  public ResponseEntity getPlayers(@RequestParam(required = false) Short season, @RequestParam(required = false) Short week,
-      @RequestParam(required = false) String position) {
+  public ResponseEntity getPlayers(@RequestParam Short season, @RequestParam Short week,
+      String position) {
     try {
       log.debug("season: {} week: {} position: {}", season, week, position);
       var players = playersService.getPlayers(season, week, position);
@@ -35,7 +35,7 @@ public class PlayersController {
       log.warn("players not found in database", e);
       var message = "No Players were found in the database. Query for a season and the database will populate with data from that year.";
       if (season > 0) {
-        apiService.getPlayers(season);
+        apiService.getPlayers(season, week);
         message = "Retrieving players from api. Try again shortly.";
       }
       return ResponseEntity.status(204).body(message);

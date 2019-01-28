@@ -1,16 +1,18 @@
 package com.finalfantasy.football.stats;
 
-import com.finalfantasy.football.AbstractModel;
-
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class StatKey extends AbstractModel {
+public class StatKey extends AbstractStatKey {
 
   @Id
-  public int id;
-  public String abbr;
-  public String name;
-  public String shortName;
+  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  public Integer id;
+
+  Stat toStat() {
+    return new Stat(this);
+  }
 }
